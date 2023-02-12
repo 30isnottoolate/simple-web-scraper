@@ -2,20 +2,18 @@ const axios = require("axios");
 const cheerio = require("cheerio");
 const fs = require("fs");
 
-const urlToScrape = "https://en.wikipedia.org/wiki/Function_(mathematics)";
-
-const scrapeData = async (url) => {
+const scrapeData = async (targetUrl, targetElement) => {
     try {
-        const response = await axios.get(url);
+        const response = await axios.get(targetUrl);
         const htmlData = cheerio.load(response.data, null, false);
-        const items = htmlData("a");
+        const items = htmlData(targetElement);
         const itemsArray = [];
 
         items.each((index, item) => {
-            itemsArray.push(htmlData(item).attr("href"));
+            itemsArray.push(htmlData(item).text());
         });
 
-        fs.writeFile("data/scraped-data.json", JSON.stringify(itemsArray, null, 4), (error) => {
+        fs.writeFile("scraped-data.json", JSON.stringify(itemsArray, null, 4), (error) => {
             if (error) {
                 console.error(error);
                 return;
@@ -29,4 +27,4 @@ const scrapeData = async (url) => {
     }
 }
 
-scrapeData(urlToScrape);
+scrapeData("https://en.wikipedia.org/wiki/Function_(music)", "span.mw-headline");
