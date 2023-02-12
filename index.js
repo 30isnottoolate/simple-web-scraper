@@ -22,7 +22,9 @@ const scrapeData = async (targetUrl, targetElement) => {
             console.log("Data scraped");
         });
 
-    } catch (error) {
+    } 
+    
+    catch (error) {
         console.error(error);
     }
 }
